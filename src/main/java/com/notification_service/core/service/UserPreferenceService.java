@@ -67,9 +67,9 @@ public class UserPreferenceService {
      * Updates the preference for a user.
      */
     public void updatePreference(UserPreference preference) {
-        preferenceStore.put(preference.getUserId(), preference);
+        preferenceStore.put(preference.userId(), preference);
         log.info("Updated preferences for userId: {} | Enabled channels: {}",
-                preference.getUserId(), preference.getEnabledChannels());
+                preference.userId(), preference.enabledChannels());
     }
 
     /**

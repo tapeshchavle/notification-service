@@ -63,15 +63,15 @@ public class NotificationController {
             @Valid @RequestBody NotificationRequest request) {
 
         log.info("POST /api/v1/notifications — userId={}, type={}, priority={}",
-                request.getUserId(), request.getType(), request.getPriority());
+                request.userId(), request.type(), request.priority());
 
         Notification notification = orchestrator.sendNotification(
-                request.getUserId(),
-                request.getType(),
-                request.getSubject(),
-                request.getBody(),
-                request.getMetadata(),
-                request.getPriority()
+                request.userId(),
+                request.type(),
+                request.subject(),
+                request.body(),
+                request.metadata(),
+                request.priority()
         );
 
         NotificationResponse response = NotificationResponse.success(
@@ -93,20 +93,20 @@ public class NotificationController {
             @Valid @RequestBody ScheduleNotificationRequest request) {
 
         log.info("POST /api/v1/notifications/schedule — userId={}, type={}, scheduledAt={}",
-                request.getUserId(), request.getType(), request.getScheduledAt());
+                request.userId(), request.type(), request.scheduledAt());
 
         String scheduleId = scheduler.scheduleNotification(
-                request.getUserId(),
-                request.getType(),
-                request.getSubject(),
-                request.getBody(),
-                request.getMetadata(),
-                request.getPriority(),
-                request.getScheduledAt()
+                request.userId(),
+                request.type(),
+                request.subject(),
+                request.body(),
+                request.metadata(),
+                request.priority(),
+                request.scheduledAt()
         );
 
         NotificationResponse response = NotificationResponse.scheduled(
-                scheduleId, request.getType(), request.getScheduledAt());
+                scheduleId, request.type(), request.scheduledAt());
 
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(response);
     }

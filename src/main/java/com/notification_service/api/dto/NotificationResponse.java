@@ -9,82 +9,73 @@ import java.util.Map;
 /**
  * DTO for notification API responses.
  * Provides a clean, stable API contract independent of internal domain changes.
+ * <p>
+ * Use static factory methods for construction.
  */
-public class NotificationResponse {
-
-    private String notificationId;
-    private NotificationStatus status;
-    private NotificationType type;
-    private String message;
-    private Instant timestamp;
-    private Map<String, Long> metrics;
+public record NotificationResponse(
+        String notificationId,
+        NotificationStatus status,
+        NotificationType type,
+        String message,
+        Instant timestamp,
+        Map<String, Long> metrics
+) {
 
     // ── Static Factory Methods ─────────────────────────────────────────
 
     public static NotificationResponse success(String notificationId, NotificationType type) {
-        NotificationResponse response = new NotificationResponse();
-        response.notificationId = notificationId;
-        response.status = NotificationStatus.QUEUED;
-        response.type = type;
-        response.message = "Notification accepted and queued for delivery via " + type;
-        response.timestamp = Instant.now();
-        return response;
+        return new NotificationResponse(
+                notificationId,
+                NotificationStatus.QUEUED,
+                type,
+                "Notification accepted and queued for delivery via " + type,
+                Instant.now(),
+                null
+        );
     }
 
     public static NotificationResponse scheduled(String scheduleId, NotificationType type, Instant scheduledAt) {
-        NotificationResponse response = new NotificationResponse();
-        response.notificationId = scheduleId;
-        response.status = NotificationStatus.PENDING;
-        response.type = type;
-        response.message = "Notification scheduled for delivery at " + scheduledAt + " via " + type;
-        response.timestamp = Instant.now();
-        return response;
+        return new NotificationResponse(
+                scheduleId,
+                NotificationStatus.PENDING,
+                type,
+                "Notification scheduled for delivery at " + scheduledAt + " via " + type,
+                Instant.now(),
+                null
+        );
     }
 
     public static NotificationResponse fromNotification(String notificationId, NotificationStatus status,
                                                          NotificationType type) {
-        NotificationResponse response = new NotificationResponse();
-        response.notificationId = notificationId;
-        response.status = status;
-        response.type = type;
-        response.message = "Notification status: " + status;
-        response.timestamp = Instant.now();
-        return response;
+        return new NotificationResponse(
+                notificationId,
+                status,
+                type,
+                "Notification status: " + status,
+                Instant.now(),
+                null
+        );
     }
 
     public static NotificationResponse error(String message) {
-        NotificationResponse response = new NotificationResponse();
-        response.status = null;
-        response.message = message;
-        response.timestamp = Instant.now();
-        return response;
+        return new NotificationResponse(
+                null,
+                null,
+                null,
+                message,
+                Instant.now(),
+                null
+        );
     }
 
     public static NotificationResponse withMetrics(Map<String, Long> metrics) {
-        NotificationResponse response = new NotificationResponse();
-        response.message = "Current system metrics";
-        response.metrics = metrics;
-        response.timestamp = Instant.now();
-        return response;
+        return new NotificationResponse(
+                null,
+                null,
+                null,
+                "Current system metrics",
+                Instant.now(),
+                metrics
+        );
     }
-
-    // ── Getters & Setters ──────────────────────────────────────────────
-
-    public String getNotificationId() { return notificationId; }
-    public void setNotificationId(String notificationId) { this.notificationId = notificationId; }
-
-    public NotificationStatus getStatus() { return status; }
-    public void setStatus(NotificationStatus status) { this.status = status; }
-
-    public NotificationType getType() { return type; }
-    public void setType(NotificationType type) { this.type = type; }
-
-    public String getMessage() { return message; }
-    public void setMessage(String message) { this.message = message; }
-
-    public Instant getTimestamp() { return timestamp; }
-    public void setTimestamp(Instant timestamp) { this.timestamp = timestamp; }
-
-    public Map<String, Long> getMetrics() { return metrics; }
-    public void setMetrics(Map<String, Long> metrics) { this.metrics = metrics; }
 }
