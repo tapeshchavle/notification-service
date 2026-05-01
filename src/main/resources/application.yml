@@ -1,0 +1,29 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: notification-service
+
+# ─────────────────────────────────────────────────────────────
+# Notification Service Configuration
+# ─────────────────────────────────────────────────────────────
+notification:
+  queue:
+    capacity: 10000               # Max items in the in-memory queue
+    consumer-threads: 4           # Number of concurrent queue consumers
+
+  retry:
+    max-retries: 3                # Maximum retry attempts per notification
+    base-delay-ms: 1000           # Initial backoff delay in milliseconds
+    multiplier: 2.0               # Exponential backoff multiplier
+    max-delay-ms: 30000           # Maximum delay cap in milliseconds
+    jitter-factor: 0.2            # ±20% jitter to prevent thundering herd
+
+  scheduler:
+    pool-size: 2                  # Scheduler thread pool size
+
+  async:
+    core-pool-size: 4             # Async executor core threads
+    max-pool-size: 8              # Async executor max threads
+    queue-capacity: 500           # Async executor queue capacity
