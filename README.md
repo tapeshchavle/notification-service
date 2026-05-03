@@ -816,5 +816,3 @@ public class WhatsAppChannelProcessor extends AbstractChannelProcessor {
 | ScheduledExecutorService | Retry scheduling + delayed delivery |
 
 ---
-
-<p align="center"><b>Built with ❤️ following industry-standard system design principles</b></p>
